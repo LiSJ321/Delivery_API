@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Delivery_BLL.Exceptions;
+using Delivery_BLL.Services.IServices;
 using Delivery_DAL.Data;
 using Delivery_DAL.Dto;
 using Delivery_DAL.Entity;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Delivery_BLL.Services
 {
-    public class DishService
+    public class DishService: IDishService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
