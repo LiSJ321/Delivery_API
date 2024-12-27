@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using Delivery_BLL.Configs;
+using Delivery_BLL.Exceptions;
 using Delivery_BLL.Services.IServices;
 using Delivery_DAL.Data;
 using Delivery_DAL.Dto;
+using Delivery_DAL.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,6 +74,24 @@ namespace Delivery_BLL.Services
                 throw new NotFoundException("User does not exist");
             }
             return _mapper.Map<UserDto>(user);
+        }
+        public async Task EditProfile(UserEditModel profile, Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                throw new NotFoundException("User does not exist");
+            }
+
+            user.FullName = profile.FullName;
+            user.BirthDate = profile.BirthDate;
+            user.Gender = profile.Gender;
+            user.Address = profile.Address;
+            user.PhoneNumber = profile.PhoneNumber;
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }
