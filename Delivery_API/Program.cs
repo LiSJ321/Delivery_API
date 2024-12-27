@@ -1,11 +1,12 @@
+using Delivery_BLL.Configs;
+using Delivery_BLL.Services.IServices;
+using Delivery_BLL.Services;
 using Delivery_DAL.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
