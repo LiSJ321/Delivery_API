@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace Delivery_BLL.Services
 {
     public class JwtService : IJwtService
@@ -23,7 +24,7 @@ namespace Delivery_BLL.Services
 
         public JwtSecurityToken CreateToken(User user)
         {
-            var jwtConfig = _configuration.GetSection("Jwt").Get<JwtConfig>();
+            var jwtConfig = _configuration.GetSection("JwtConfig").Get<JwtConfig>();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SigningKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var claimsList = new List<Claim>
