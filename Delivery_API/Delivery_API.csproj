@@ -12,10 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Delivery_BLL\Delivery_BLL.csproj" />
     <ProjectReference Include="..\Delivery_DAL\Delivery_DAL.csproj" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />

@@ -1,4 +1,5 @@
 ﻿
+using Delivery_DAL.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Delivery_DAL.Data
