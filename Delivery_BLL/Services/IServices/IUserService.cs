@@ -12,6 +12,7 @@ namespace Delivery_BLL.Services.IServices
         bool IsUniqueUser(UserRegisterModel register);
         Task<string> Register(UserRegisterModel register);
         Task<string> Login(LoginCredentials credentials);
-        
+        Task<UserDto> GetProfile(Guid userId);
+        Task EditProfile(UserEditModel profile, Guid userId);
     }
 }
