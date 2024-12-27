@@ -110,5 +110,63 @@ namespace Delivery_BLL.Services
 
             return dish == null ? throw new NotFoundException($"Dish with id = {id} don't in database") : _mapper.Map<DishDto>(dish);
         }
+        public async Task<bool> CheckRating(Guid dishId, Guid userId)
+        {
+            var dish = await _context.Dishes.FirstOrDefaultAsync(d => d.Id == dishId) ?? throw new NotFoundException($"Dish with id = {dishId} don't in database");
+            foreach (var order in _context.Orders)
+            {
+                if (order.UserId == userId && order.Status == OrderStatus.Delivered)
+                {
+                    foreach (var cart in _context.OrderBaskets)
+                    {
+                        if (cart.OrderId == order.Id && cart.DishId == dishId)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public async Task SetRating(Guid dishId, int ratingScore, Guid userId)
+        {
+            var dish = await _context.Dishes.FirstOrDefaultAsync(d => d.Id == dishId) ?? throw new NotFoundException($"Dish with id = {dishId} don't in database");
+            if (!await CheckRating(dishId, userId))
+            {
+                throw new BadRequestException("User can't set rating on dish that wasn't ordered");
+            }
+
+            var rating = await _context.Ratings.FirstOrDefaultAsync(r => r.UserId == userId && r.DishId == dishId);
+            if (rating != null)
+            {
+                rating.RatingScore = ratingScore;
+                _context.Ratings.Update(rating);
+            }
+            else
+            {
+                _context.Ratings.Add(new Rating
+                {
+                    Id = Guid.NewGuid(),
+                    DishId = dishId,
+                    UserId = userId,
+                    RatingScore = ratingScore
+                });
+
+            }
+            await _context.SaveChangesAsync();
+
+            double dishRating = _context.Ratings
+            .Where(rating => rating.DishId == dishId)
+            .Select(rating => rating.RatingScore)
+            .ToList()
+            .Average();
+
+            dish.Rating = dishRating;
+            _context.Dishes.Update(dish);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
