@@ -10,6 +10,8 @@ namespace Delivery_BLL.Configs
         {
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, UserRegisterModel>().ReverseMap();
+
+            CreateMap<Dish, DishDto>().ReverseMap();
         }
     }
 }

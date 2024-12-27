@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Delivery_BLL.Exceptions;
 using Delivery_DAL.Data;
 using Delivery_DAL.Dto;
 using Delivery_DAL.Entity;
@@ -101,6 +102,12 @@ namespace Delivery_BLL.Services
                 DishSorting.RatingDesc => dishes.OrderByDescending(d => d.Rating),
                 _ => throw new Exception()
             };
+        }
+        public async Task<DishDto> GetDishDetails(Guid id)
+        {
+            var dish = await _context.Dishes.FirstOrDefaultAsync(d => d.Id == id);
+
+            return dish == null ? throw new NotFoundException($"Dish with id = {id} don't in database") : _mapper.Map<DishDto>(dish);
         }
     }
 }
